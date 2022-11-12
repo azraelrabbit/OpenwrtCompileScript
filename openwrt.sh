@@ -1394,7 +1394,7 @@ source_lean() {
 		update_feeds
 
 		#target.mk
-		target_mk="automount autosamba luci-app-filetransfer luci-app-ssr-plus luci-app-sfe luci-app-accesscontrol luci-app-serverchan luci-app-diskman luci-app-fileassistant  luci-app-wrtbwmon luci-app-frpc  luci-app-arpbind luci-app-wol luci-app-unblockmusic  luci-app-dockerman luci-app-ikoolproxy lm-sensors #tr_ok"
+		target_mk="automount autosamba luci-app-filetransfer luci-app-ssr-plus luci-app-sfe luci-app-accesscontrol luci-app-serverchan luci-app-diskman luci-app-fileassistant  luci-app-wrtbwmon luci-app-frpc  luci-app-arpbind luci-app-wol luci-app-unblockmusic  luci-app-dockerman lm-sensors luci-app-vsftpd #tr_ok"
 		if [[ `grep -o "#tr_ok" include/target.mk | wc -l ` == "1" ]]; then
 			echo ""
 		else
@@ -1413,11 +1413,12 @@ source_lean() {
 			sed -i "s/luci-app-uugamebooster//g" target/linux/x86/Makefile
 			sed -i "s/luci-app-adbyby-plus//g" target/linux/x86/Makefile
 			sed -i "s/luci-app-wireguard//g" target/linux/x86/Makefile
+			sed -i "s/luci-app-baidupcs-web//g" target/linux/x86/Makefile
 		fi
 
 		#修改X86默认固件大小
-		if [[ `grep -o "default 160" config/Config-images.in | wc -l` == "1" ]]; then
-			sed -i 's\default 160\default 1024\g' config/Config-images.in
+		if [[ `grep -o "default 480" config/Config-images.in | wc -l` == "1" ]]; then
+			sed -i 's\default 480\default 1024\g' config/Config-images.in
 			#传统模式
 			grub_position=$(cat config/Config-images.in | grep -n "Build GRUB images" | awk  '{print $1}' | sed "s/://")
 			del_num=$(($grub_position + 4))
@@ -1697,14 +1698,6 @@ other_plugins() {
 			cd $HOME/$OW/$you_file/lede/
 		else
 			git clone https://github.com/project-lede/luci-app-godproxy.git package/other-plugins/luci-app-godproxy
-		fi
-
-		 #错误访问登录限制（来自恩山401626436）
-		if [[ -e package/other-plugins/luci-app-banlogon ]]; then
-			rm -rf  package/other-plugins/luci-app-banlogon
-			cp -r $HOME/$OW/$SF/$OCS/package/luci-app-banlogon  package/other-plugins/luci-app-banlogon
-		else
-			cp -r $HOME/$OW/$SF/$OCS/package/luci-app-banlogon  package/other-plugins/luci-app-banlogon
 		fi
 
 		#安装脚本
